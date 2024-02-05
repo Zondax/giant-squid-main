@@ -28,16 +28,27 @@ function getChain(): { api: ChainApi; config: ProcessorConfig } {
     throw new Error(`Chain ${chainName} not found in assets/chains-data.json`)
   }
 
-  let processorConfig: ProcessorConfig = {
-    chainName: chainConfig.network,
-    dataSource: {
-      archive: lookupArchive(
-        chainConfig.archiveName as KnownArchivesSubstrate,
-        { release: 'FireSquid' }
-      ),
-    },
-    prefix: chainConfig.prefix,
+  let processorConfig: ProcessorConfig
+  const customChainArchiveUrl = process.env.CHAIN_ARCHIVE_URL
+  if(customChainArchiveUrl){
+    processorConfig = {
+      chainName: chainConfig.network,
+      dataSource: customChainArchiveUrl,
+      prefix: chainConfig.prefix,
+    }
+  } else {
+    processorConfig = {
+      chainName: chainConfig.network,
+      dataSource: {
+        archive: lookupArchive(
+            chainConfig.archiveName as KnownArchivesSubstrate,
+            { release: 'FireSquid' }
+        ),
+      },
+      prefix: chainConfig.prefix,
+    }
   }
+
 
   if (chainAPI.customConfig) {
     Object.assign(processorConfig, chainAPI.customConfig)
