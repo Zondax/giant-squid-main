@@ -5,6 +5,9 @@
     "node": ">=16"
   },
   "scripts": {
+    "db:migrate": "npx squid-typeorm-migration apply",
+    "processor:start": "node lib/main.js",
+    "query-node:start": "squid-graphql-server --subscriptions --max-response-size 10000",
     "build": "rm -rf lib && tsc"
   },
   "dependencies": {
