@@ -1,0 +1,4 @@
+projectName: giant-squid-main
+templates:
+  - template: templates/earthly-dockerfile
+  - template: templates/publish-earthly
