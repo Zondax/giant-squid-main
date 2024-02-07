@@ -28,27 +28,44 @@ function getChain(): { api: ChainApi; config: ProcessorConfig } {
     throw new Error(`Chain ${chainName} not found in assets/chains-data.json`)
   }
 
-  let processorConfig: ProcessorConfig
+  const customChainNodeUrl = process.env.CHAIN_NODE_URL
   const customChainArchiveUrl = process.env.CHAIN_ARCHIVE_URL
-  if(customChainArchiveUrl){
-    processorConfig = {
-      chainName: chainConfig.network,
-      dataSource: customChainArchiveUrl,
-      prefix: chainConfig.prefix,
-    }
-  } else {
-    processorConfig = {
-      chainName: chainConfig.network,
-      dataSource: {
-        archive: lookupArchive(
-            chainConfig.archiveName as KnownArchivesSubstrate,
-            { release: 'FireSquid' }
-        ),
-      },
-      prefix: chainConfig.prefix,
-    }
+  const blockFrom = process.env.BLOCK_START
+  const blockTo = process.env.BLOCK_TO
+
+  if(!customChainNodeUrl){
+    throw new Error(`CHAIN_NODE_URL must be set`)
   }
 
+  if(!customChainArchiveUrl){
+    throw new Error(`CHAIN_ARCHIVE_URL must be set`)
+  }
+
+  let processorConfig:ProcessorConfig = {
+    chainName: chainConfig.network,
+    dataSource: {
+      archive: customChainArchiveUrl,
+      chain: customChainNodeUrl,
+
+    },
+    prefix: chainConfig.prefix,
+  }
+
+
+  if(blockFrom){
+    if(isNaN(parseInt(blockFrom))){
+      throw new Error(`BLOCK_START should be a number`)
+    }
+
+    processorConfig.blockRange = {from: parseInt(blockFrom)}
+    if(blockTo) {
+      if (isNaN(parseInt(blockFrom))) {
+        throw new Error(`BLOCK_TO should be a number`)
+      }
+
+      processorConfig.blockRange = {...processorConfig.blockRange, to: parseInt(blockTo)}
+    }
+  }
 
   if (chainAPI.customConfig) {
     Object.assign(processorConfig, chainAPI.customConfig)
