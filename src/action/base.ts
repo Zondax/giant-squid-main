@@ -1,5 +1,5 @@
 import assert from 'assert'
-import {StoreWithCache} from '@belopash/squid-tools'
+import {StoreWithCache} from '@belopash/typeorm-store'
 import {DataHandlerContext, SubstrateBlock, SubstrateExtrinsic} from '@subsquid/substrate-processor'
 import {withErrorContext} from '@subsquid/util-internal'
 

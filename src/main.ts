@@ -1,6 +1,6 @@
 import {TypeormDatabase} from '@subsquid/typeorm-store'
 import {processor} from './processor'
-import {StoreWithCache} from '@belopash/squid-tools'
+import {StoreWithCache} from '@belopash/typeorm-store'
 import {encodeAddress, getOriginAccountId, processItem} from './utils'
 import {chain} from './chain'
 import {Account, Identity, Judgement, IdentitySub} from './model'
@@ -21,7 +21,7 @@ import {
 import {toHex} from '@subsquid/substrate-processor'
 
 processor.run(new TypeormDatabase(), async (_ctx) => {
-    let store = StoreWithCache.create(_ctx.store)
+    let store = new StoreWithCache(() => (_ctx.store as any).em())
     let ctx = {..._ctx, store}
 
     const actions: Action[] = []
@@ -313,7 +313,7 @@ processor.run(new TypeormDatabase(), async (_ctx) => {
                 if (origin == null) break
 
                 const identityId = encodeAddress(origin)
-                const identity = ctx.store.defer(Identity, identityId, {subs: true})
+                const identity = ctx.store.defer(Identity, {id: identityId, relations: {subs: true} })
 
                 actions.push(
                     new ClearIdentityAction(block, item.extrinsic, {
@@ -326,10 +326,7 @@ processor.run(new TypeormDatabase(), async (_ctx) => {
                     new LazyAction(block, item.extrinsic, async (ctx) => {
                         const a: Action[] = []
 
-                        const i = await ctx.store.getOrFail(Identity, {
-                            where: {id: identityId},
-                            relations: {subs: true},
-                        })
+                        const i = await ctx.store.getOrFail(Identity, {id: identityId, relations: {subs: true} })
 
                         for (const s of i.subs) {
                             new RemoveIdentitySubAction(block, item.extrinsic, {
@@ -353,7 +350,7 @@ processor.run(new TypeormDatabase(), async (_ctx) => {
                 if (origin == null) break
 
                 const identityId = encodeAddress(origin)
-                const identity = ctx.store.defer(Identity, identityId, {subs: true})
+                const identity = ctx.store.defer(Identity, {id: identityId, relations: {subs: true} })
 
                 actions.push(
                     new ClearIdentityAction(block, item.extrinsic, {
@@ -366,10 +363,7 @@ processor.run(new TypeormDatabase(), async (_ctx) => {
                     new LazyAction(block, item.extrinsic, async () => {
                         const a: Action[] = []
 
-                        const i = await ctx.store.getOrFail(Identity, {
-                            where: {id: identityId},
-                            relations: {subs: true},
-                        })
+                        const i = await ctx.store.getOrFail(Identity, {id: identityId, relations: {subs: true} })
 
                         for (const s of i.subs) {
                             new RemoveIdentitySubAction(block, item.extrinsic, {
