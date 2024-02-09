@@ -498,6 +498,18 @@
     "archiveName": "polkadot"
   },
   {
+    "prefix": 42,
+    "network": "paseo",
+    "displayName": "Paseo Tesnet Relay Chain",
+    "symbols": [
+      "PAS"
+    ],
+    "decimals": [
+      10
+    ],
+    "archiveName": "paseo"
+  },
+  {
     "prefix": 255,
     "network": "quartz",
     "displayName": "QUARTZ by UNIQUE",
