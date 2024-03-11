@@ -19,6 +19,8 @@ const Rewarded = {
                 return {stash, amount}
             } else if (e.isV9300) {
                 return e.asV9300
+            }else if (e.isV1001002) {
+                return e.asV1001002
             } else {
                 throw new UnknownVersionError(e)
             }

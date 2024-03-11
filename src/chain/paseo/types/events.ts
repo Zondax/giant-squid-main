@@ -286,7 +286,7 @@ export class StakingRewardedEvent {
      * The nominator has been rewarded by this amount.
      */
     get isV9300(): boolean {
-        return this._chain.getEventHash('Staking.Rewarded') === 'aa169b460298a3833e89c51c9a8b87e01c995327696f303fd797a6fd1468d9a6'
+        return this._chain.getEventHash('Staking.Rewarded') === '9623d141834cd425342a1ff7a2b2265acd552799bcd6a0df67eb08a661e2215d'
     }
 
     /**
@@ -294,6 +294,22 @@ export class StakingRewardedEvent {
      */
     get asV9300(): {stash: Uint8Array, amount: bigint} {
         assert(this.isV9300)
+        return this._chain.decodeEvent(this.event)
+    }
+
+
+    /**
+     * The nominator has been rewarded by this amount.
+     */
+    get isV1001002(): boolean {
+        return this._chain.getEventHash('Staking.Rewarded') === 'aa169b460298a3833e89c51c9a8b87e01c995327696f303fd797a6fd1468d9a6'
+    }
+
+    /**
+     * The nominator has been rewarded by this amount.
+     */
+    get asV1001002(): {stash: Uint8Array, amount: bigint} {
+        assert(this.isV1001002)
         return this._chain.decodeEvent(this.event)
     }
 }
