@@ -498,7 +498,7 @@
     "archiveName": "polkadot"
   },
   {
-    "prefix": 42,
+    "prefix": 0,
     "network": "paseo",
     "displayName": "Paseo Tesnet Relay Chain",
     "symbols": [
