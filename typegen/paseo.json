@@ -1,6 +1,6 @@
 {
-    "outDir": "../src/chain/polkadot/types",
-    "specVersions": "https://firesquid-dot-gateway.zondax.ch/graphql\n",
+    "outDir": "../src/chain/paseo/types",
+    "specVersions": "https://firesquid-pas-gateway.zondax.ch/graphql",
     "events": [
         "Balances.Transfer",
         "Staking.Reward",
